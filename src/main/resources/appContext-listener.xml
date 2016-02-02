@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="travelrestapi.com" />
+
+	<bean id="adminService" class="travelrestapi.com.bo.AdminServiceBO">
+	</bean>
+	<bean id="utilities" class="travelrestapi.com.util.Utilities">
+	</bean>
+	<bean id="response" class="travelrestapi.com.util.Response">
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:db.properties</value>
+				<value>classpath:application.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="appProp" class="travelrestapi.com.util.AppProp">
+		<property name="adminMailId" value="${app.adminEmailId}" />
+		<property name="mailSubject" value="${app.emailSubject}" />
+		<property name="uploadedCsvPath" value="${app.uploadedCsvPath}" />
+		<property name="FbAppId" value="${app.FB_APP_ID}" />
+		<property name="FbAppSecret" value="${app.FB_APP_SECRET}" />
+		<property name="FbAppURI" value="${app.REDIRECT_URI}" />
+		<property name="uploadImagePath" value="${app.uploadImagePath}" />
+		<property name="uploadImageCompressPath" value="${app.uploadImageCompressFilePath}" />
+		<property name="serverDomain" value="${app.uploadImageCompressFilePath}" />
+		<property name="enqurirySubject" value="${app.enquriry.subject}" />
+		<property name="enquriryContent" value="${app.enquriry.content}" />
+		<property name="authEmail" value="${app.auth.email}" />
+		<property name="authPass" value="${app.auth.password}" />
+		<property name="smtpHost" value="${app.smtp.host}" />
+		<property name="smtpPort" value="${app.smtp.port}" />
+		<property name="adminName" value="${app.admin.name}" />
+	</bean>
+
+</beans>
+	 

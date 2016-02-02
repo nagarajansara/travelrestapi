@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+   <display-name>travelrestapi</display-name>
+   
+   <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:appContext-*.xml</param-value>
+	</context-param>
+  <servlet>
+        <servlet-name>springapp-dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:appContext-*.xml</param-value>
+		</init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+    <servlet-mapping>
+        <servlet-name>springapp-dispatcher</servlet-name>
+        <url-pattern>/travelrestapi/*</url-pattern>
+    </servlet-mapping>
+
+
+   <filter>
+    <filter-name>AuthenticationFilter</filter-name>
+    <filter-class>travelrestapi.com.config.AuthenticationFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthenticationFilter</filter-name>
+    <url-pattern>/view/*</url-pattern>
+    <url-pattern>/travelrestapi/*</url-pattern>
+  </filter-mapping>
+	
+</web-app>
