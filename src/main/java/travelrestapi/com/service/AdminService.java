@@ -75,4 +75,6 @@ public interface AdminService
 
 	List<Trip> getTripDetailsBasedId(int tripId) throws Exception;
 
+	List<Login> getUserDetailsBasedEmail(String userEmail) throws Exception;
+
 }

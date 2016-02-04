@@ -2,6 +2,7 @@ package travelrestapi.com.dao;
 
 import java.util.*;
 
+import travelrestapi.com.model.Login;
 import travelrestapi.com.model.Trip;
 
 public interface TripDetailsDAO
@@ -29,5 +30,7 @@ public interface TripDetailsDAO
 			throws Exception;
 
 	List<Trip> getTripDetailsBasedId(int tripId) throws Exception;
+
+	
 
 }

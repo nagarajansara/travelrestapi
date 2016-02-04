@@ -817,4 +817,31 @@ public class AdminController extends BaseController
 		model.addAttribute("model", response);
 		return response;
 	}
+
+	@RequestMapping(
+			value = "/getUserDetailsBasedEmail/{userEmail}/{authToken}",
+			method =
+			{ RequestMethod.GET, RequestMethod.POST })
+	public Response getUserDetailsBasedEmail(@PathVariable String authToken,
+			@PathVariable String userEmail, HttpServletRequest request,
+			HttpServletResponse res, ModelMap model)
+	{
+		try
+		{
+			Map<String, Object> map = new HashMap<String, Object>();
+			int userId = getUserId(authToken);
+			
+			List<Login> list = adminService.getUserDetailsBasedEmail(userEmail);
+			
+			utilities.setSuccessResponse(response, list);
+
+		} catch (Exception ex)
+		{
+			logger.error("getTripDetailsBasedId :" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+
+		model.addAttribute("model", response);
+		return response;
+	}
 }

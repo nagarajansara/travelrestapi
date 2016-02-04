@@ -53,6 +53,9 @@ public class AdminDAOImpl implements AdminDAO
 	final String GET_VENDOR_LIST_SEARCH_KEY_NUMENTRIES_ALL =
 			"SELECT count(*)  from users where (email  LIKE :searchKey) "
 					+ "AND role =:role";
+	final String GET_USER_DETAILS_BASED_EMAIL =
+			"SELECT email, firstname, lastname, address, phoneno, pincode, state, "
+					+ "	pancardno, mobile, organizationname, role, credits from users where email =:email";
 
 	final String STATUS_ACTIVE = "active";
 	final String ROLE_VENDOR = "ROLE_VENDOR";
@@ -184,7 +187,7 @@ public class AdminDAOImpl implements AdminDAO
 
 		if (status.equals(Login.APPROVED_STATUS_ALL))
 		{
-			
+
 			return namedParameterJdbcTemplate.queryForInt(
 					GET_VENDOR_LIST_SEARCH_KEY_NUMENTRIES_ALL, paramMap);
 		} else
@@ -196,5 +199,16 @@ public class AdminDAOImpl implements AdminDAO
 
 	}
 
+	@Override
+	public List<Login> getUserDetailsBasedEmail(String userEmail)
+			throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("email", userEmail);
+
+		return namedParameterJdbcTemplate.query(GET_USER_DETAILS_BASED_EMAIL,
+				paramMap, new BeanPropertyRowMapper(Login.class));
+
+	}
 
 }

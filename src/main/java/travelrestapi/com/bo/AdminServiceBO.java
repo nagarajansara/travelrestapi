@@ -200,4 +200,11 @@ public class AdminServiceBO implements AdminService
 	{
 		return tripDetailsDAO.getTripDetailsBasedId(tripId);
 	}
+
+	@Override
+	public List<Login> getUserDetailsBasedEmail(String userEmail)
+			throws Exception
+	{
+		return adminDAO.getUserDetailsBasedEmail(userEmail);
+	}
 }

@@ -35,4 +35,6 @@ public interface AdminDAO
 	int getVendorListSearchNumEntries(String searchKey, String status,
 			int startIndx, int maxIndx) throws Exception;
 
+	List<Login> getUserDetailsBasedEmail(String userEmail) throws Exception;
+
 }
