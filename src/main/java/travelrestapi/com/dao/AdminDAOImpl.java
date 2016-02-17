@@ -56,6 +56,10 @@ public class AdminDAOImpl implements AdminDAO
 	final String GET_USER_DETAILS_BASED_EMAIL =
 			"SELECT email, firstname, lastname, address, phoneno, pincode, state, "
 					+ "	pancardno, mobile, organizationname, role, credits from users where email =:email";
+	final String ADD_META_TAG =
+			"INSERT into metatag (keywords, tripid) values (:keywords, :tripid)";
+	final String UPDATE_META_TAG =
+			"UPDATE metatag set keywords =:keywords where tripid =:tripid";
 
 	final String STATUS_ACTIVE = "active";
 	final String ROLE_VENDOR = "ROLE_VENDOR";
@@ -211,4 +215,20 @@ public class AdminDAOImpl implements AdminDAO
 
 	}
 
+	public void addMetaKeywords(String keywords, int tripId) throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("keywords", keywords);
+		paramMap.put("tripid", tripId);
+		namedParameterJdbcTemplate.update(ADD_META_TAG, paramMap);
+	}
+
+	public void updateMetaKeywords(String keywords, int tripId)
+			throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("keywords", keywords);
+		paramMap.put("tripid", tripId);
+		namedParameterJdbcTemplate.update(UPDATE_META_TAG, paramMap);
+	}
 }

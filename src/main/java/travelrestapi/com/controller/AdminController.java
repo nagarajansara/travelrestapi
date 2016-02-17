@@ -830,9 +830,9 @@ public class AdminController extends BaseController
 		{
 			Map<String, Object> map = new HashMap<String, Object>();
 			int userId = getUserId(authToken);
-			
+
 			List<Login> list = adminService.getUserDetailsBasedEmail(userEmail);
-			
+
 			utilities.setSuccessResponse(response, list);
 
 		} catch (Exception ex)
@@ -840,7 +840,77 @@ public class AdminController extends BaseController
 			logger.error("getTripDetailsBasedId :" + ex.getMessage());
 			utilities.setErrResponse(ex, response);
 		}
+		model.addAttribute("model", response);
+		return response;
+	}
 
+	@RequestMapping(value = "/getDashboardDetails/{authToken}", method =
+	{ RequestMethod.GET, RequestMethod.POST })
+	public Response getDashboardDetails(@PathVariable String authToken,
+			@PathVariable String userEmail, HttpServletRequest request,
+			HttpServletResponse res, ModelMap model)
+	{
+		try
+		{
+			String isApproved = "no";
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			int totalNonApprovedUsers =
+					adminService.getNumEntries_UserStatus(isApproved);
+		} catch (Exception ex)
+		{
+			logger.error("getDashboardDetails :" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+		model.addAttribute("model", response);
+		return response;
+	}
+
+	@RequestMapping(value = "/addMetaKeywords/{keywords}/{tripId}/{authToken}",
+			method =
+			{ RequestMethod.GET, RequestMethod.POST })
+	public
+			Response addMetaKeywords(@PathVariable String authToken,
+					@PathVariable int tripId, @PathVariable String keywords,
+					HttpServletRequest request, HttpServletResponse res,
+					ModelMap model)
+	{
+		try
+		{
+			int userId = getUserId(authToken);
+			adminService.addMetaKeywords(keywords, tripId);
+			utilities.setSuccessResponse(response);
+
+		} catch (Exception ex)
+		{
+			logger.error("addMetaKeywords :" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+		model.addAttribute("model", response);
+		return response;
+	}
+
+	@RequestMapping(
+			value = "/updateMetaKeywords/{keywords}/{tripId}/{authToken}",
+			method =
+			{ RequestMethod.GET, RequestMethod.POST })
+	public
+			Response updateMetaKeywords(@PathVariable String authToken,
+					@PathVariable int tripId, @PathVariable String keywords,
+					HttpServletRequest request, HttpServletResponse res,
+					ModelMap model)
+	{
+		try
+		{
+			int userId = getUserId(authToken);
+			adminService.updateMetaKeywords(keywords, tripId);
+			utilities.setSuccessResponse(response);
+
+		} catch (Exception ex)
+		{
+			logger.error("updateMetaKeywords :" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
 		model.addAttribute("model", response);
 		return response;
 	}

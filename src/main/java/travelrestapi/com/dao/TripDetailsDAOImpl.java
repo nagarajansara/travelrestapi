@@ -46,7 +46,7 @@ public class TripDetailsDAOImpl implements TripDetailsDAO
 					+ "INNER JOIN users u "
 					+ "ON u.id = t.userid WHERE t.status =:status  AND (t.title LIKE :searchKey) ";
 	final String GET_TRIP_DETAILS_BASED_ID =
-			"SELECT t.id, t.title, t.fromdate, t.todate, t.route, "
+			"SELECT IFNULL(m.keywords, 'EMPTY_TXT') AS keywords,  t.id, t.title, t.fromdate, t.todate, t.route, "
 					+ "t.price, t.guidelines, t.description, "
 					+ "a.name, IFNULL (GROUP_CONCAT(DISTINCT ti.name), '') AS tripimages,"
 					+ "IFNULL (GROUP_CONCAT(DISTINCT i.daywisedescription "
@@ -59,6 +59,9 @@ public class TripDetailsDAOImpl implements TripDetailsDAO
 					+ "INNER JOIN "
 					+ "tripimages ti  "
 					+ "ON t.id = ti.tripid "
+					+ "LEFT OUTER JOIN metatag m "
+					+ "ON "
+					+ "m.tripid = t.id "
 					+ "WHERE t.id =:tripId "
 					+ "GROUP BY t.title, t.fromdate, t.todate, t.route,  "
 					+ "t.price, t.guidelines, t.description, t.description, t.id";

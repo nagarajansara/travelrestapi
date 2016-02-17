@@ -207,4 +207,22 @@ public class AdminServiceBO implements AdminService
 	{
 		return adminDAO.getUserDetailsBasedEmail(userEmail);
 	}
+
+	@Override
+	public List<Login> getUsers_Status(String isApproved)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void addMetaKeywords(String keywords, int tripId) throws Exception
+	{
+		adminDAO.addMetaKeywords(keywords, tripId);
+	}
+
+	public void updateMetaKeywords(String keywords, int tripId)
+			throws Exception
+	{
+		adminDAO.updateMetaKeywords(keywords, tripId);
+	}
 }

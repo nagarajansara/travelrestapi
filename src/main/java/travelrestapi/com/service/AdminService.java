@@ -6,6 +6,7 @@ import travelrestapi.com.model.Activity;
 import travelrestapi.com.model.Admin;
 import travelrestapi.com.model.AdminAuth;
 import travelrestapi.com.model.Login;
+import travelrestapi.com.model.MetaTag;
 import travelrestapi.com.model.Trip;
 
 public interface AdminService
@@ -76,5 +77,11 @@ public interface AdminService
 	List<Trip> getTripDetailsBasedId(int tripId) throws Exception;
 
 	List<Login> getUserDetailsBasedEmail(String userEmail) throws Exception;
+
+	List<Login> getUsers_Status(String isApproved);
+
+	void addMetaKeywords(String keywords, int tripId) throws Exception;
+
+	void updateMetaKeywords(String keywords, int tripId) throws Exception;
 
 }

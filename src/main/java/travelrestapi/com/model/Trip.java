@@ -23,6 +23,20 @@ public class Trip
 	@Setter
 	private int userid;
 
+	public String getKeywords()
+	{
+		return keywords;
+	}
+
+	public void setKeywords(String keywords)
+	{
+		this.keywords = keywords;
+	}
+
+	@Getter
+	@Setter
+	private String keywords;
+
 	public String getDaywisedescription()
 	{
 		return daywisedescription;

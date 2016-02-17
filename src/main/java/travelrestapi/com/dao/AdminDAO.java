@@ -37,4 +37,8 @@ public interface AdminDAO
 
 	List<Login> getUserDetailsBasedEmail(String userEmail) throws Exception;
 
+	void addMetaKeywords(String keywords, int tripId) throws Exception;
+
+	void updateMetaKeywords(String keywords, int tripId) throws Exception;
+
 }

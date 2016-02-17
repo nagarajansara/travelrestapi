@@ -21,7 +21,7 @@
 		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
 		<constructor-arg ref="dataSource"></constructor-arg>
 	</bean>
-	
+
 	<bean id="adminDAO" class="travelrestapi.com.dao.AdminDAOImpl">
 	</bean>
 	<bean id="tripDetailsDAO" class="travelrestapi.com.dao.TripDetailsDAOImpl">
