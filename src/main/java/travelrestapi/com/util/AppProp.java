@@ -45,6 +45,18 @@ public class AppProp
 	private String uploadImagePath;
 	private String adminName;
 
+	public String getUploadCSVPath()
+	{
+		return uploadCSVPath;
+	}
+
+	public void setUploadCSVPath(String uploadCSVPath)
+	{
+		this.uploadCSVPath = uploadCSVPath;
+	}
+
+	private String uploadCSVPath;
+
 	public String getSmtpHost()
 	{
 		return smtpHost;

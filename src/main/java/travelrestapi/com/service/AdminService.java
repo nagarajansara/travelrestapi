@@ -2,6 +2,8 @@ package travelrestapi.com.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import travelrestapi.com.model.Activity;
 import travelrestapi.com.model.Admin;
 import travelrestapi.com.model.AdminAuth;
@@ -83,5 +85,11 @@ public interface AdminService
 	void addMetaKeywords(String keywords, int tripId) throws Exception;
 
 	void updateMetaKeywords(String keywords, int tripId) throws Exception;
+
+	void addSubActivity(String subActivityName) throws Exception;
+
+	void addBulkActivity(HttpServletRequest request) throws Exception;
+
+	void addBulkSubActivity(HttpServletRequest request) throws Exception;
 
 }

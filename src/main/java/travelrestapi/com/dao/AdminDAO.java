@@ -2,6 +2,7 @@ package travelrestapi.com.dao;
 
 import java.util.List;
 
+import travelrestapi.com.model.Activity;
 import travelrestapi.com.model.Admin;
 import travelrestapi.com.model.AdminAuth;
 import travelrestapi.com.model.Login;
@@ -40,5 +41,9 @@ public interface AdminDAO
 	void addMetaKeywords(String keywords, int tripId) throws Exception;
 
 	void updateMetaKeywords(String keywords, int tripId) throws Exception;
+
+	void addSubActivity(String subActivityName) throws Exception;
+
+	void addBulkSubActivity(List<Activity> list) throws Exception;
 
 }

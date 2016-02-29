@@ -14,6 +14,9 @@
 	</bean>
 	<bean id="response" class="travelrestapi.com.util.Response">
 	</bean>
+	<bean id="csvConnection" class="travelrestapi.com.model.CsvConnection">
+	</bean>
+	
 
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -42,6 +45,7 @@
 		<property name="smtpHost" value="${app.smtp.host}" />
 		<property name="smtpPort" value="${app.smtp.port}" />
 		<property name="adminName" value="${app.admin.name}" />
+		<property name="uploadCSVPath" value="${app.upload.csvPath}" />
 	</bean>
 
 </beans>

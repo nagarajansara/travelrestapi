@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 
+import travelrestapi.com.model.Activity;
 import travelrestapi.com.model.Admin;
 import travelrestapi.com.model.AdminAuth;
 import travelrestapi.com.model.Login;
@@ -60,6 +63,10 @@ public class AdminDAOImpl implements AdminDAO
 			"INSERT into metatag (keywords, tripid) values (:keywords, :tripid)";
 	final String UPDATE_META_TAG =
 			"UPDATE metatag set keywords =:keywords where tripid =:tripid";
+	final String ADD_SUBACTIVITY =
+			"INSERT INTO subactivity (name) values (:name)";
+	final String ADD_BULK_SUB_ACTIVITY =
+			"INSERT IGNORE INTO subactivity (name) values (:name)";
 
 	final String STATUS_ACTIVE = "active";
 	final String ROLE_VENDOR = "ROLE_VENDOR";
@@ -230,5 +237,25 @@ public class AdminDAOImpl implements AdminDAO
 		paramMap.put("keywords", keywords);
 		paramMap.put("tripid", tripId);
 		namedParameterJdbcTemplate.update(UPDATE_META_TAG, paramMap);
+	}
+
+	@Override
+	public void addSubActivity(String subActivityName) throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("name", subActivityName);
+
+		namedParameterJdbcTemplate.update(ADD_SUBACTIVITY, paramMap);
+
+	}
+
+	@Override
+	public void addBulkSubActivity(List<Activity> list) throws Exception
+	{
+		SqlParameterSource[] params =
+				SqlParameterSourceUtils.createBatch(list.toArray());
+
+		namedParameterJdbcTemplate.batchUpdate(ADD_BULK_SUB_ACTIVITY, params);
+
 	}
 }

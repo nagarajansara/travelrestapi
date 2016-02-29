@@ -485,6 +485,42 @@ public class AdminController extends BaseController
 		return response;
 	}
 
+	@RequestMapping(value = "/addBulkActivity", method =
+	{ RequestMethod.GET, RequestMethod.POST })
+	public Response addBulkActivity(HttpServletRequest request,
+			HttpServletResponse res, ModelMap model)
+	{
+		try
+		{
+			adminService.addBulkActivity(request);
+			utilities.setSuccessResponse(response);
+		} catch (Exception ex)
+		{
+			logger.error("addBulkActivity" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+		model.addAttribute("model", response);
+		return response;
+	}
+
+	@RequestMapping(value = "/addBulkSubActivity", method =
+	{ RequestMethod.GET, RequestMethod.POST })
+	public Response addBulkSubActivity(HttpServletRequest request,
+			HttpServletResponse res, ModelMap model)
+	{
+		try
+		{
+			adminService.addBulkSubActivity(request);
+			utilities.setSuccessResponse(response);
+		} catch (Exception ex)
+		{
+			logger.error("addBulkSubActivity" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+		model.addAttribute("model", response);
+		return response;
+	}
+
 	@RequestMapping(value = "/getActivitys/{activityStatus}/{authToken}",
 			method =
 			{ RequestMethod.GET, RequestMethod.POST })
@@ -909,6 +945,27 @@ public class AdminController extends BaseController
 		} catch (Exception ex)
 		{
 			logger.error("updateMetaKeywords :" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+		model.addAttribute("model", response);
+		return response;
+	}
+
+	@RequestMapping(value = "/addSubActivity/{subActivityName}/{authToken}",
+			method =
+			{ RequestMethod.GET, RequestMethod.POST })
+	public Response addSubActivity(@PathVariable String subActivityName,
+			@PathVariable String authToken, HttpServletRequest request,
+			HttpServletResponse res, ModelMap model)
+	{
+		try
+		{
+			int userId = getUserId(authToken);
+			adminService.addSubActivity(subActivityName);
+			utilities.setSuccessResponse(response);
+		} catch (Exception ex)
+		{
+			logger.error("addSubActivity :" + ex.getMessage());
 			utilities.setErrResponse(ex, response);
 		}
 		model.addAttribute("model", response);

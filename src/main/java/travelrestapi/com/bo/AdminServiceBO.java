@@ -1,7 +1,20 @@
 package travelrestapi.com.bo;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -9,12 +22,16 @@ import travelrestapi.com.dao.ActivityDAO;
 import travelrestapi.com.dao.AdminDAO;
 import travelrestapi.com.dao.TripDetailsDAO;
 import travelrestapi.com.model.Activity;
+import travelrestapi.com.model.CsvConnection;
 import travelrestapi.com.model.Login;
 import travelrestapi.com.model.Admin;
 import travelrestapi.com.model.AdminAuth;
 import travelrestapi.com.model.Trip;
 import travelrestapi.com.service.AdminService;
+import travelrestapi.com.util.AppProp;
 
+@SuppressWarnings(
+{ "unused", "unchecked" })
 public class AdminServiceBO implements AdminService
 {
 
@@ -29,6 +46,19 @@ public class AdminServiceBO implements AdminService
 	@Autowired
 	@Qualifier("activityDAO")
 	ActivityDAO activityDAO;
+
+	@Autowired
+	@Qualifier("appProp")
+	AppProp appProp;
+
+	@Autowired
+	@Qualifier("csvConnection")
+	CsvConnection csvConnection;
+
+	public static final int ONE_MB = 1024 * 1024; // 1 MB - Do not modify this.
+	public static final int MAX_BUFFER_SIZE = ONE_MB; // 1 MB
+	public static final int MAX_VIDEO_SIZE = 50 * ONE_MB; // 10 MB
+	public static final int MAX_IMAGE_SIZE = 2 * ONE_MB; // 10 MB
 
 	@Override
 	public List<Admin> getVendorList(int startIndx, int endIndx)
@@ -224,5 +254,173 @@ public class AdminServiceBO implements AdminService
 			throws Exception
 	{
 		adminDAO.updateMetaKeywords(keywords, tripId);
+	}
+
+	@Override
+	public void addSubActivity(String subActivityName) throws Exception
+	{
+		adminDAO.addSubActivity(subActivityName);
+	}
+
+	@Override
+	public void addBulkActivity(HttpServletRequest request) throws Exception
+	{
+		String UpdateVideoResult = "";
+		FileOutputStream fileOutputStream = null;
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		List<String> list = new ArrayList<String>();
+		String tempFileName = "";
+		String fileName = "";
+		List<FileItem> items =
+				new ServletFileUpload(new DiskFileItemFactory())
+						.parseRequest(request);
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+		try
+		{
+			if (isMultipart)
+			{
+				File file;
+				for (FileItem item : items)
+				{
+					if (!item.isFormField())
+					{
+
+						fileName = item.getName();
+						String oldFileName = "";
+						boolean isInMemory = item.isInMemory();
+						long sizeInBytes = item.getSize();
+						String finalImageURL = "";
+
+						if (fileName.lastIndexOf("\\") >= 0)
+						{
+
+							oldFileName =
+									fileName.substring(fileName
+											.lastIndexOf("\\"));
+							tempFileName =
+									appProp.getUploadCSVPath() + oldFileName;
+							file = new File(tempFileName);
+						} else
+						{
+							oldFileName =
+									fileName.substring(fileName
+											.lastIndexOf("\\") + 1);
+							tempFileName =
+									appProp.getUploadCSVPath() + oldFileName;
+							file = new File(tempFileName);
+						}
+						item.write(file);
+						CSVProcess(oldFileName, true);
+					}
+				}
+
+			}
+		} catch (Exception ex)
+		{
+			throw ex;
+		}
+
+	}
+
+	public void CSVProcess(String csvFileName, boolean isActivity)
+			throws Exception
+	{
+		Connection connection = null;
+		ResultSet resultSet = null;
+		Statement statement = null;
+		List<Activity> list = new ArrayList<Activity>();
+		try
+		{
+			csvFileName = csvFileName.split("\\.")[0];
+			String query = "SELECT name from " + csvFileName;
+			connection =
+					csvConnection.getCsvConnection(appProp.getUploadCSVPath());
+			if (connection != null)
+			{
+				statement = connection.createStatement();
+				resultSet = statement.executeQuery(query);
+				while (resultSet.next())
+				{
+					String name = resultSet.getString(1);
+					Activity activity = new Activity(name);
+					list.add(activity);
+				}
+				if (isActivity)
+				{
+					activityDAO.addBulkActivity(list);
+				} else
+				{
+					adminDAO.addBulkSubActivity(list);
+				}
+
+			}
+		} catch (Exception ex)
+		{
+			throw ex;
+		} finally
+		{
+			csvConnection.closeCSVConnection(connection, statement, resultSet);
+		}
+	}
+
+	@Override
+	public void addBulkSubActivity(HttpServletRequest request) throws Exception
+	{
+		String UpdateVideoResult = "";
+		FileOutputStream fileOutputStream = null;
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		List<String> list = new ArrayList<String>();
+		String tempFileName = "";
+		String fileName = "";
+		List<FileItem> items =
+				new ServletFileUpload(new DiskFileItemFactory())
+						.parseRequest(request);
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+
+		try
+		{
+			if (isMultipart)
+			{
+				File file;
+				for (FileItem item : items)
+				{
+					if (!item.isFormField())
+					{
+
+						fileName = item.getName();
+						String oldFileName = "";
+						boolean isInMemory = item.isInMemory();
+						long sizeInBytes = item.getSize();
+						String finalImageURL = "";
+
+						if (fileName.lastIndexOf("\\") >= 0)
+						{
+
+							oldFileName =
+									fileName.substring(fileName
+											.lastIndexOf("\\"));
+							tempFileName =
+									appProp.getUploadCSVPath() + oldFileName;
+							file = new File(tempFileName);
+						} else
+						{
+							oldFileName =
+									fileName.substring(fileName
+											.lastIndexOf("\\") + 1);
+							tempFileName =
+									appProp.getUploadCSVPath() + oldFileName;
+							file = new File(tempFileName);
+						}
+						item.write(file);
+						CSVProcess(oldFileName, false);
+					}
+				}
+
+			}
+		} catch (Exception ex)
+		{
+			throw ex;
+		}
+
 	}
 }

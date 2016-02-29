@@ -26,4 +26,5 @@ public interface ActivityDAO
 	int getActivitySearchKeyNumEntries(String searchKey, String status)
 			throws Exception;
 
+	void addBulkActivity(List<Activity> list) throws Exception;
 }

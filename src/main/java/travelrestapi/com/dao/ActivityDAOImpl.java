@@ -8,6 +8,8 @@ import org.codehaus.jackson.map.deser.impl.BeanPropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 
 import travelrestapi.com.model.Activity;
 
@@ -41,6 +43,9 @@ public class ActivityDAOImpl implements ActivityDAO
 			"Select count(*) from activity where status =:status  AND name LIKE :searchKey";
 	final String GET_ACTIVITY_SEARCH_KEY_ALL_NUMENTRIES =
 			"Select count(*) from activity where name LIKE :searchKey";
+
+	final String ADD_BULK_ACTIVITY =
+			"INSERT IGNORE INTO activity (name) values (:name)";
 
 	public void addActivity(String activityName) throws Exception
 	{
@@ -147,6 +152,15 @@ public class ActivityDAOImpl implements ActivityDAO
 					GET_ACTIVITY_SEARCH_KEY_NUMENTRIES, paramMap);
 		}
 
+	}
+
+	@Override
+	public void addBulkActivity(List<Activity> list) throws Exception
+	{
+		SqlParameterSource[] params =
+				SqlParameterSourceUtils.createBatch(list.toArray());
+
+		namedParameterJdbcTemplate.batchUpdate(ADD_BULK_ACTIVITY, params);
 	}
 
 }
