@@ -92,4 +92,15 @@ public interface AdminService
 
 	void addBulkSubActivity(HttpServletRequest request) throws Exception;
 
+	List<Activity> getSubActivity(String activityStatus, int startIndx,
+			int maxIndx) throws Exception;
+
+	int getSubActivity_NumEntries(String activityStatus) throws Exception;
+
+	List<Activity> getSubActivity_All(int startIndx, int maxIndx)
+			throws Exception;
+
+	void updateSubActivityStatus(int activityId, String status)
+			throws Exception;
+
 }

@@ -537,11 +537,7 @@ public class AdminController extends BaseController
 			int startIndx = utilities.getDefaultMinIndx();
 			int maxIndx = utilities.getDefaultMaxIndx();
 
-			if (Activity.GET_ACTIVITY_STATUS_ALL.equals(activityStatus))
-			{
-				list = adminService.getActivitys_All(startIndx, maxIndx);
-				numEntries = adminService.getTripDetails_ALL_numEntries();
-			} else
+			
 			{
 				list =
 						adminService.getActivity(activityStatus, startIndx,
@@ -601,6 +597,109 @@ public class AdminController extends BaseController
 		} catch (Exception ex)
 		{
 			logger.error("getActivitysPagination " + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+		model.addAttribute("model", response);
+		return response;
+	}
+
+	@RequestMapping(value = "/getSubActivitys/{activityStatus}/{authToken}",
+			method =
+			{ RequestMethod.GET, RequestMethod.POST })
+	public Response getSubActivitys(@PathVariable String authToken,
+			@PathVariable String activityStatus, HttpServletRequest request,
+			HttpServletResponse res, ModelMap model)
+	{
+		try
+		{
+			int userId = getUserId(authToken);
+			Map<String, Object> map = new HashMap<String, Object>();
+			int numEntries = 0;
+			List<Activity> list = null;
+			int startIndx = utilities.getDefaultMinIndx();
+			int maxIndx = utilities.getDefaultMaxIndx();
+
+			
+			{
+				list =
+						adminService.getSubActivity(activityStatus, startIndx,
+								maxIndx);
+				numEntries =
+						adminService.getSubActivity_NumEntries(activityStatus);
+			}
+			map.put("subActivityDetails", list);
+			map.put("numEntries", numEntries);
+
+			utilities.setSuccessResponse(response, map);
+		} catch (Exception ex)
+		{
+			logger.error("getSubActivitys" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+		model.addAttribute("model", response);
+		return response;
+	}
+
+	@RequestMapping(
+			value = "/updateSubActivityStatus/{activityId}/{status}/{authToken}",
+			method =
+			{ RequestMethod.GET, RequestMethod.POST })
+	public
+			Response updateSubActivityStatus(@PathVariable String authToken,
+					@PathVariable int activityId, @PathVariable String status,
+					HttpServletRequest request, HttpServletResponse res,
+					ModelMap model)
+	{
+		try
+		{
+			int userId = getUserId(authToken);
+			adminService.updateSubActivityStatus(activityId, status);
+			utilities.setSuccessResponse(response);
+
+		} catch (Exception ex)
+		{
+			logger.error("updateSubActivityStatus :" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+		model.addAttribute("model", response);
+		return response;
+	}
+
+	@RequestMapping(
+			value = "/getSubActivitysPagination/{activityStatus}/{startIndx}/{authToken}",
+			method =
+			{ RequestMethod.GET, RequestMethod.POST })
+	public
+			Response getSubActivitysPagination(@PathVariable String authToken,
+					@PathVariable String activityStatus,
+					@PathVariable int startIndx, HttpServletRequest request,
+					HttpServletResponse res, ModelMap model)
+	{
+		try
+		{
+			int userId = getUserId(authToken);
+			Map<String, Object> map = new HashMap<String, Object>();
+			int numEntries = 0;
+			List<Activity> list = null;
+			startIndx = startIndx - 1;
+			startIndx = getStartIdx(startIndx, utilities.getDefaultMaxIndx());
+			int maxIndx = utilities.getDefaultMaxIndx();
+
+			
+			{
+				list =
+						adminService.getSubActivity(activityStatus, startIndx,
+								maxIndx);
+				numEntries =
+						adminService.getSubActivity_NumEntries(activityStatus);
+			}
+			map.put("subActivityDetails", list);
+			map.put("numEntries", numEntries);
+
+			utilities.setSuccessResponse(response, map);
+		} catch (Exception ex)
+		{
+			logger.error("getSubActivitysPagination " + ex.getMessage());
 			utilities.setErrResponse(ex, response);
 		}
 		model.addAttribute("model", response);

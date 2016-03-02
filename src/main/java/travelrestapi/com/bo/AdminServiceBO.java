@@ -423,4 +423,32 @@ public class AdminServiceBO implements AdminService
 		}
 
 	}
+
+	@Override
+	public List<Activity> getSubActivity(String activityStatus, int startIndx,
+			int maxIndx) throws Exception
+	{
+		return adminDAO.getSubActivity(activityStatus, startIndx, maxIndx);
+	}
+
+	@Override
+	public int getSubActivity_NumEntries(String activityStatus)
+			throws Exception
+	{
+		return adminDAO.getSubActivity_NumEntries(activityStatus);
+	}
+
+	@Override
+	public List<Activity> getSubActivity_All(int startIndx, int maxIndx)
+			throws Exception
+	{
+		return adminDAO.getSubActivity_All(startIndx, maxIndx);
+	}
+
+	@Override
+	public void updateSubActivityStatus(int activityId, String status)
+			throws Exception
+	{
+		adminDAO.updateSubActivityStatus(activityId, status);
+	}
 }

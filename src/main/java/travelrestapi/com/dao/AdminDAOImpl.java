@@ -67,6 +67,15 @@ public class AdminDAOImpl implements AdminDAO
 			"INSERT INTO subactivity (name) values (:name)";
 	final String ADD_BULK_SUB_ACTIVITY =
 			"INSERT IGNORE INTO subactivity (name) values (:name)";
+	final String GET_SUB_ACTIVITY =
+			"SELECT id, name, status from subactivity where status =:status LIMIT :startIndx, :endIndx";
+	final String GET_SUB_ACTIVITY_NUMENTRIES =
+			"SELECT count(*) from subactivity where status =:status";
+
+	final String GET_SUB_ACTIVITY_ALL =
+			"SELECT id, name, status from subactivity where LIMIT :startIndx, :endIndx";
+	final String UPDATE_SUB_ACTIVITY_STATUS =
+			"Update subactivity set status =:status where id =:id";
 
 	final String STATUS_ACTIVE = "active";
 	final String ROLE_VENDOR = "ROLE_VENDOR";
@@ -257,5 +266,51 @@ public class AdminDAOImpl implements AdminDAO
 
 		namedParameterJdbcTemplate.batchUpdate(ADD_BULK_SUB_ACTIVITY, params);
 
+	}
+
+	@Override
+	public List<Activity> getSubActivity(String activityStatus, int startIndx,
+			int maxIndx) throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("status", activityStatus);
+		paramMap.put("startIndx", startIndx);
+		paramMap.put("endIndx", maxIndx);
+
+		return namedParameterJdbcTemplate.query(GET_SUB_ACTIVITY, paramMap,
+				new BeanPropertyRowMapper(Activity.class));
+	}
+
+	@Override
+	public int getSubActivity_NumEntries(String activityStatus)
+			throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("status", activityStatus);
+
+		return namedParameterJdbcTemplate.queryForInt(
+				GET_SUB_ACTIVITY_NUMENTRIES, paramMap);
+
+	}
+
+	@Override
+	public List<Activity> getSubActivity_All(int startIndx, int maxIndx)
+			throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("startIndx", startIndx);
+		paramMap.put("endIndx", maxIndx);
+		return namedParameterJdbcTemplate.query(GET_SUB_ACTIVITY_ALL, paramMap,
+				new BeanPropertyRowMapper(Activity.class));
+	}
+
+	@Override
+	public void updateSubActivityStatus(int activityId, String status)
+			throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("id", activityId);
+		paramMap.put("status", status);
+		namedParameterJdbcTemplate.update(UPDATE_SUB_ACTIVITY_STATUS, paramMap);
 	}
 }
