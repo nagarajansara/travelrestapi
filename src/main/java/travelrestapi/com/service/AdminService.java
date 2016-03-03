@@ -103,4 +103,15 @@ public interface AdminService
 	void updateSubActivityStatus(int activityId, String status)
 			throws Exception;
 
+	void addTopActivityList(int tripId) throws Exception;
+
+	void deleteTopActivityList(int tripId) throws Exception;
+
+	void getTopActivity(int startIndx, int endIndx) throws Exception;
+
+	List<Trip> getTopActivity(int startIndx, int endIndx, String sTATUS_ACTIVE)
+			throws Exception;
+
+	int getTopActivityNumEntries(String sTATUS_ACTIVE) throws Exception;
+
 }

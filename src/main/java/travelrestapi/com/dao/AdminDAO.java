@@ -57,4 +57,13 @@ public interface AdminDAO
 	void updateSubActivityStatus(int activityId, String status)
 			throws Exception;
 
+	void addTopActivityList(int tripId) throws Exception;
+
+	void deleteTopActivityList(int tripId) throws Exception;
+
+	List<Trip> getTopActivity(int startIndx, int endIndx, String sTATUS_ACTIVE)
+			throws Exception;
+
+	int getTopActivityNumEntries(String sTATUS_ACTIVE) throws Exception;
+
 }

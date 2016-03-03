@@ -451,4 +451,35 @@ public class AdminServiceBO implements AdminService
 	{
 		adminDAO.updateSubActivityStatus(activityId, status);
 	}
+
+	@Override
+	public void addTopActivityList(int tripId) throws Exception
+	{
+		adminDAO.addTopActivityList(tripId);
+	}
+
+	public void deleteTopActivityList(int tripId) throws Exception
+	{
+		adminDAO.deleteTopActivityList(tripId);
+	}
+
+	@Override
+	public void getTopActivity(int startIndx, int endIndx) throws Exception
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<Trip> getTopActivity(int startIndx, int endIndx,
+			String sTATUS_ACTIVE) throws Exception
+	{
+		return adminDAO.getTopActivity(startIndx, endIndx, sTATUS_ACTIVE);
+	}
+
+	@Override
+	public int getTopActivityNumEntries(String sTATUS_ACTIVE) throws Exception
+	{
+		return adminDAO.getTopActivityNumEntries(sTATUS_ACTIVE);
+	}
 }

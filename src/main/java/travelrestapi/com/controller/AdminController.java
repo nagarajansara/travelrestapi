@@ -358,6 +358,7 @@ public class AdminController extends BaseController
 			int startIndx = utilities.getDefaultMinIndx();
 			int endIndx = utilities.getDefaultMaxIndx();
 			int numEntries = 0;
+			String STATUS_ACTIVE = "active";
 			List<Trip> list = null;
 
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -368,6 +369,13 @@ public class AdminController extends BaseController
 			{
 				list = adminService.getTripDetails_ALL(startIndx, endIndx);
 				numEntries = adminService.getTripDetails_ALL_numEntries();
+			} else if (tripStatus.equals("topActivity"))
+			{
+				list =
+						adminService.getTopActivity(startIndx, endIndx,
+								STATUS_ACTIVE);
+				numEntries =
+						adminService.getTopActivityNumEntries(STATUS_ACTIVE);
 			} else
 			{
 				list =
@@ -453,7 +461,16 @@ public class AdminController extends BaseController
 	{
 		try
 		{
-			adminService.updateTripdetails(tripStatus, tripId);
+			if (tripStatus.equals("true"))
+			{
+				adminService.addTopActivityList(tripId);
+			} else if (tripStatus.equals("false"))
+			{
+				adminService.deleteTopActivityList(tripId);
+			} else
+			{
+				adminService.updateTripdetails(tripStatus, tripId);
+			}
 			int userId = getUserId(authToken);
 			utilities.setSuccessResponse(response);
 		} catch (Exception ex)
@@ -537,7 +554,6 @@ public class AdminController extends BaseController
 			int startIndx = utilities.getDefaultMinIndx();
 			int maxIndx = utilities.getDefaultMaxIndx();
 
-			
 			{
 				list =
 						adminService.getActivity(activityStatus, startIndx,
@@ -619,7 +635,6 @@ public class AdminController extends BaseController
 			int startIndx = utilities.getDefaultMinIndx();
 			int maxIndx = utilities.getDefaultMaxIndx();
 
-			
 			{
 				list =
 						adminService.getSubActivity(activityStatus, startIndx,
@@ -685,7 +700,6 @@ public class AdminController extends BaseController
 			startIndx = getStartIdx(startIndx, utilities.getDefaultMaxIndx());
 			int maxIndx = utilities.getDefaultMaxIndx();
 
-			
 			{
 				list =
 						adminService.getSubActivity(activityStatus, startIndx,
@@ -1065,6 +1079,37 @@ public class AdminController extends BaseController
 		} catch (Exception ex)
 		{
 			logger.error("addSubActivity :" + ex.getMessage());
+			utilities.setErrResponse(ex, response);
+		}
+		model.addAttribute("model", response);
+		return response;
+	}
+
+	@RequestMapping(
+			value = "/addTopActivityList/{tripId}/{isTopActivityList}/{authToken}",
+			method =
+			{ RequestMethod.GET, RequestMethod.POST })
+	public
+			Response addTopActivityList(
+					@PathVariable boolean isTopActivityList,
+					@PathVariable String authToken, @PathVariable int tripId,
+					HttpServletRequest request, HttpServletResponse res,
+					ModelMap model)
+	{
+		try
+		{
+			int userId = getUserId(authToken);
+			if (isTopActivityList)
+			{
+				adminService.addTopActivityList(tripId);
+			} else
+			{
+				adminService.deleteTopActivityList(tripId);
+			}
+			utilities.setSuccessResponse(response);
+		} catch (Exception ex)
+		{
+			logger.error("addTopActivityList :" + ex.getMessage());
 			utilities.setErrResponse(ex, response);
 		}
 		model.addAttribute("model", response);

@@ -77,6 +77,22 @@ public class AdminDAOImpl implements AdminDAO
 	final String UPDATE_SUB_ACTIVITY_STATUS =
 			"Update subactivity set status =:status where id =:id";
 
+	final String ADD_TOP_ACTIVITY_LIST =
+			"INSERT INTO admin_topactivity (tripid) values (:tripId)";
+	final String DELETE_TOP_ACTIVITY_LIST =
+			"DELETE from admin_topactivity where tripid =:tripId";
+
+	final String GET_TOP_ACTIVITYS =
+			"SELECT t.id, t.title, t.duration, t.fromdate, u.email, t.todate, t.status "
+					+ "FROM admin_topactivity a " + "INNER JOIN tripdetails t "
+					+ "ON a.tripid = t.id " + "INNER JOIN users u "
+					+ "ON u.id = t.userid "
+					+ "WHERE t.status =:status LIMIT :startIndx, :endIndx";
+	final String GET_TOP_ACTIVITYS_NUMENTRIES = "SELECT count(*)  "
+			+ "FROM admin_topactivity a " + "INNER JOIN tripdetails t "
+			+ "ON a.tripid = t.id " + "INNER JOIN users u "
+			+ "ON u.id = t.userid " + "WHERE t.status =:status";
+
 	final String STATUS_ACTIVE = "active";
 	final String ROLE_VENDOR = "ROLE_VENDOR";
 
@@ -313,4 +329,44 @@ public class AdminDAOImpl implements AdminDAO
 		paramMap.put("status", status);
 		namedParameterJdbcTemplate.update(UPDATE_SUB_ACTIVITY_STATUS, paramMap);
 	}
+
+	@Override
+	public void addTopActivityList(int tripId) throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("tripId", tripId);
+		namedParameterJdbcTemplate.update(ADD_TOP_ACTIVITY_LIST, paramMap);
+
+	}
+
+	public void deleteTopActivityList(int tripId) throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("tripId", tripId);
+		namedParameterJdbcTemplate.update(DELETE_TOP_ACTIVITY_LIST, paramMap);
+
+	}
+
+	@Override
+	public List<Trip> getTopActivity(int startIndx, int endIndx,
+			String sTATUS_ACTIVE) throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("startIndx", startIndx);
+		paramMap.put("endIndx", endIndx);
+		paramMap.put("status", sTATUS_ACTIVE);
+
+		return namedParameterJdbcTemplate.query(GET_TOP_ACTIVITYS, paramMap,
+				new BeanPropertyRowMapper(Trip.class));
+	}
+
+	@Override
+	public int getTopActivityNumEntries(String sTATUS_ACTIVE) throws Exception
+	{
+		Map paramMap = new HashMap();
+		paramMap.put("status", sTATUS_ACTIVE);
+		return namedParameterJdbcTemplate.queryForInt(
+				GET_TOP_ACTIVITYS_NUMENTRIES, paramMap);
+	}
+
 }

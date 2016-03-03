@@ -21,7 +21,6 @@ public class CsvConnection
 			conn = DriverManager.getConnection("jdbc:relique:csv:" + csvPath);
 		} catch (Exception ex)
 		{
-			System.out.println("getCsvConnection :" + ex.getMessage());
 			throw ex;
 		}
 		return conn;
