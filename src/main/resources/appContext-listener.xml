@@ -16,7 +16,9 @@
 	</bean>
 	<bean id="csvConnection" class="travelrestapi.com.model.CsvConnection">
 	</bean>
-	
+	<bean id="jMSProducer" class="travelrestapi.com.JMS.JMSProducer">
+	</bean>
+
 
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

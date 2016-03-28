@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +34,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import travelrestapi.com.service.*;
+import travelrestapi.com.JMS.JMSProducer;
 import travelrestapi.com.dao.*;
 import travelrestapi.com.model.*;
 import travelrestapi.com.util.*;
@@ -223,6 +225,14 @@ public class AdminController extends BaseController
 		try
 		{
 			adminService.updateApprovedStatus(email, approvedStatus);
+			if (approvedStatus.equals("yes"))
+			{
+				// Send Mail
+				utilities.setJMS_Enqueued(email, "Verified successfully",
+						email.split("@")[0], "Activation Mail",
+						JMSProducer.EMAIL_QUEUE);
+			}
+
 			utilities.setSuccessResponse(response);
 		} catch (Exception ex)
 		{
@@ -464,6 +474,7 @@ public class AdminController extends BaseController
 			if (tripStatus.equals("true"))
 			{
 				adminService.addTopActivityList(tripId);
+
 			} else if (tripStatus.equals("false"))
 			{
 				adminService.deleteTopActivityList(tripId);
